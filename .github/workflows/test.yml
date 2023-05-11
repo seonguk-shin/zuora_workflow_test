@@ -47,13 +47,13 @@ jobs:
         run: |
           TARGET='test'
           VERSION=0.0.1
-          token='test'
+          TOKEN='test'
           data=`cat ./zuora_workflows/${TARGET}/data.json`
           metadata==`cat ./zuora_workflows/${TARGET}/data.json`
           curl --location '${ZUORA_API_ENDPOINT}/workflows/import?version=${VERSION}&activate=true' \
           --header 'zuora-version: 239.0' \
           --header 'Content-Type: application/json' \
-          --header 'Authorization: Bearer ${{ token }} \
+          --header 'Authorization: Bearer ${{ TOKEN }} \
           --data '${{ data }}' >> $GITHUB_OUTPUT
       
       # check result
