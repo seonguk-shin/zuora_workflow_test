@@ -29,7 +29,7 @@ jobs:
       # Check PR Diff
       - name: check updated filelist
       - id: diff_list
-      - run: gh api /repos/${GITHUB_REPOSITORY}/pulls/${number}/files --jq '.[].filename' >> "$GITHUB_OUTPUT"
+        run: gh api /repos/${GITHUB_REPOSITORY}/pulls/${number}/files --jq '.[].filename' >> "$GITHUB_OUTPUT"
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}
@@ -37,14 +37,14 @@ jobs:
 
       # test
       - name: output diff
-      - run: echo ${{ steps.diff_list.outputs }} 
+        run: echo ${{ steps.diff_list.outputs }} 
 
       # fetch token
 
       # run import
       - name: run import workflow api
       - id: import
-      - run: |
+        run: |
           TARGET='test'
           VERSION=0.0.1
           token='test'
