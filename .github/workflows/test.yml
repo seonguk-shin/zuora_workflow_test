@@ -26,7 +26,7 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-      # Check PR Diff
+      # PRの差分をチェック
       - name: check updated filelist
         id: diff_list
         run: gh api /repos/${GITHUB_REPOSITORY}/pulls/${number}/files --jq '.[].filename' >> "$GITHUB_OUTPUT"
@@ -35,21 +35,28 @@ jobs:
           GH_REPO: ${{ github.repository }}
           number: ${{ github.event.number }}
 
-      # test
-      - name: output diff
+      # 差分をチェックしデプロイ対象のWFを洗い出す
+      - name: check diff
         run: echo ${{ steps.diff_list.outputs }} 
 
-      # fetch token
+      # TODO: 差分があるWFが複数の場合loop
 
-      # run import
+      # データをロード
+      - name: load data
+        run: |
+          data=`cat ./zuora_workflows/${TARGET}/data.json`
+          metadata=`cat ./zuora_workflows/${TARGET}/metadata.json`
+
+      # TODO: fetch token
+
+      # zuora workflow import
       - name: run import workflow api
         id: import
         run: |
           TARGET='test'
           VERSION=0.0.1
           number=1
-          data=`cat ./zuora_workflows/${TARGET}/data.json`
-          metadata=`cat ./zuora_workflows/${TARGET}/metadata.json`
+
           curl --location '${ZUORA_API_ENDPOINT}/workflows/import?version=${VERSION}&activate=true' \
           --header 'zuora-version: 239.0' \
           --header 'Content-Type: application/json' \
@@ -58,7 +65,6 @@ jobs:
       # check result
       - name: check result
         run: |
-          echo 
           echo ${{ steps.diff_list.outputs }} 
 
 #        # Updating the workflow ID when registering a new workflow
