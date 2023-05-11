@@ -47,12 +47,12 @@ jobs:
         run: |
           TARGET='test'
           VERSION=0.0.1
-          data=`cat ./zuora_workflows/${TARGET}/data.json`
-          metadata==`cat ./zuora_workflows/${TARGET}/data.json`
+          DATA=$(cat ./zuora_workflows/${TARGET}/data.json)
+          METADATA=$(cat ./zuora_workflows/${TARGET}/data.json)
           curl --location '${ZUORA_API_ENDPOINT}/workflows/import?version=${VERSION}&activate=true' \
           --header 'zuora-version: 239.0' \
           --header 'Content-Type: application/json' \
-          --data '${{ data }}' >> $GITHUB_OUTPUT
+          --data '${{ DATA }}' >> $GITHUB_OUTPUT
       
       # check result
       - name: check result
