@@ -1,4 +1,5 @@
-# This is a basic workflow to help you get started with Actions
+env:
+  ZUORA_API_ENDPOINT: 'https://rest.apisandbox.zuora.com'
 
 name: zuora workflow デプロイテスト
 
@@ -25,12 +26,47 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
+      # Check PR Diff
+      - name: check updated filelist
+      - id: diff_list
+      - run: gh api /repos/${GITHUB_REPOSITORY}/pulls/${number}/files --jq '.[].filename' >> "$GITHUB_OUTPUT"
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          number: ${{ github.event.number }}
 
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
+      # test
+      - name: output diff
+      - run: echo ${{ steps.diff_list.outputs }} 
+
+      # fetch token
+
+      # run import
+      - name: run import workflow api
+      - id: import
+      - run: |
+          TARGET='test'
+          VERSION=0.0.1
+          token='test'
+          data=`cat ./zuora_workflows/${TARGET}/data.json`
+          metadata==`cat ./zuora_workflows/${TARGET}/data.json`
+          curl --location '${ZUORA_API_ENDPOINT}/workflows/import?version=${VERSION}&activate=true' \
+          --header 'zuora-version: 239.0' \
+          --header 'Content-Type: application/json' \
+          --header 'Authorization: Bearer ${{ token }} \
+          --data '${{ data }}' >> $GITHUB_OUTPUT
+      
+      # check result
+      - name: check result
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+          echo 
+          echo ${{ steps.diff_list.outputs }} 
+
+#        # Updating the workflow ID when registering a new workflow
+#       - name: update workflow id
+#         uses: jossef/action-set-json-field@v1
+#         if: WORKFLOW_ID
+#         with:
+#           file: zuora_workflows/template/metadata.json
+#           field: version
+#           value:  ${{ steps.get_current_date_time.outputs.current_date_time }}
