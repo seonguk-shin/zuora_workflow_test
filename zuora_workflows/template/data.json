@@ -1,0 +1,38 @@
+{
+    "workflow_definition": {
+      "description": "Sample workflow definition"
+    },
+    "workflow": {
+      "id": 1,
+      "name": "Sample",
+      "description": "Sample Description",
+      "parameters": {
+        "disable_pending_status": true
+      },
+      "data": {},
+      "type": "Workflow::Setup",
+      "ondemand_trigger": true,
+      "callout_trigger": true,
+      "scheduled_trigger": false,
+      "interval": null,
+      "timezone": null,
+      "status": "Inactive",
+      "finished_at": null,
+      "css": {
+        "top": "40px",
+        "left": "30px"
+      },
+      "notifications": {},
+      "started_at": null,
+      "call_type": "ASYNC",
+      "priority": "Medium",
+      "delete_ttl": 30,
+      "external_track_id": null,
+      "version": "0.0.1",
+      "internal_group": "Default",
+      "event_trigger": false,
+      "zuora_org_id": null
+    },
+    "tasks": [],
+    "linkages": []
+  }
