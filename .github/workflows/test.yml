@@ -47,6 +47,7 @@ jobs:
         run: |
           TARGET='test'
           VERSION=0.0.1
+          number=1
           data=`cat ./zuora_workflows/${TARGET}/data.json`
           metadata=`cat ./zuora_workflows/${TARGET}/metadata.json`
           curl --location '${ZUORA_API_ENDPOINT}/workflows/import?version=${VERSION}&activate=true' \
